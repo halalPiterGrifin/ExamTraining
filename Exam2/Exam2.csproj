@@ -67,6 +67,7 @@
     </ApplicationDefinition>
     <Compile Include="Classes\Connection.cs" />
     <Compile Include="Classes\Manager.cs" />
+    <Compile Include="Classes\test.cs" />
     <Compile Include="Entities\Access_level.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
