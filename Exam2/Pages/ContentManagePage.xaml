@@ -1,0 +1,32 @@
+﻿<Page x:Class="Exam2.Pages.ContentManagePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Exam2.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ContentManagePage">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <DataGrid Name="dgContent" AutoGenerateColumns="False" IsReadOnly="True" IsVisibleChanged="dgContent_IsVisibleChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Фамилия" Binding="{Binding Last_name}" Width="*"></DataGridTextColumn>
+                <DataGridTextColumn Header="Имя" Binding="{Binding First_name}" Width="*"></DataGridTextColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Name="btnEdit" Content="Изменить" Click="btnEdit_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Name="btnAdd" Content="Добавить" Grid.Row="1" HorizontalAlignment="Left" Click="btnAdd_Click"/>
+        <Button Name="btnDelete" Content="Удалить" Grid.Row="1" Click="btnDelete_Click"/>
+    </Grid>
+</Page>

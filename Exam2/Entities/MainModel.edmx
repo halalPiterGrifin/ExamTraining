@@ -1,0 +1,447 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище kursModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Access_level">
+          <Key>
+            <PropertyRef Name="ID_Access_level" />
+          </Key>
+          <Property Name="ID_Access_level" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Edit_estate_data" Type="bit" Nullable="false" />
+          <Property Name="Edit_user_data" Type="bit" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="ID_Account" />
+          </Key>
+          <Property Name="ID_Account" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_User" Type="int" Nullable="false" />
+          <Property Name="ID_Access_level" Type="int" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cost">
+          <Key>
+            <PropertyRef Name="ID_Cost" />
+          </Key>
+          <Property Name="ID_Cost" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Estate" Type="int" Nullable="false" />
+          <Property Name="Current_cost" Type="decimal" Precision="8" Scale="0" Nullable="false" />
+          <Property Name="First_date" Type="date" Nullable="false" />
+          <Property Name="First_cost" Type="decimal" Precision="8" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Estate">
+          <Key>
+            <PropertyRef Name="ID_Estate" />
+          </Key>
+          <Property Name="ID_Estate" Type="int" Nullable="false" />
+          <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Street" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="House" Type="decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="Apartment" Type="decimal" Precision="3" Scale="0" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="ID_Request" />
+          </Key>
+          <Property Name="ID_Request" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_User" Type="int" Nullable="false" />
+          <Property Name="ID_Estate" Type="int" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID_User" />
+          </Key>
+          <Property Name="ID_User" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Last_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="First_name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Second_name" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="numeric" Precision="10" Scale="0" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Account_Access_level">
+          <End Role="Access_level" Type="Self.Access_level" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Access_level">
+              <PropertyRef Name="ID_Access_level" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="ID_Access_level" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="ID_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cost_Estate">
+          <End Role="Estate" Type="Self.Estate" Multiplicity="1" />
+          <End Role="Cost" Type="Self.Cost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estate">
+              <PropertyRef Name="ID_Estate" />
+            </Principal>
+            <Dependent Role="Cost">
+              <PropertyRef Name="ID_Estate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Estate">
+          <End Role="Estate" Type="Self.Estate" Multiplicity="0..1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estate">
+              <PropertyRef Name="ID_Estate" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="ID_Estate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="ID_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище kursModelContainer">
+          <EntitySet Name="Access_level" EntityType="Self.Access_level" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cost" EntityType="Self.Cost" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Estate" EntityType="Self.Estate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Request" EntityType="Self.Request" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Account_Access_level" Association="Self.FK_Account_Access_level">
+            <End Role="Access_level" EntitySet="Access_level" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_User" Association="Self.FK_Account_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cost_Estate" Association="Self.FK_Cost_Estate">
+            <End Role="Estate" EntitySet="Estate" />
+            <End Role="Cost" EntitySet="Cost" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Estate" Association="Self.FK_Request_Estate">
+            <End Role="Estate" EntitySet="Estate" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_User" Association="Self.FK_Request_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="kursModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Access_level">
+          <Key>
+            <PropertyRef Name="ID_Access_level" />
+          </Key>
+          <Property Name="ID_Access_level" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Edit_estate_data" Type="Boolean" Nullable="false" />
+          <Property Name="Edit_user_data" Type="Boolean" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Account_Access_level" FromRole="Access_level" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="ID_Account" />
+          </Key>
+          <Property Name="ID_Account" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_User" Type="Int32" Nullable="false" />
+          <Property Name="ID_Access_level" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Access_level" Relationship="Self.FK_Account_Access_level" FromRole="Account" ToRole="Access_level" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Account_User" FromRole="Account" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Cost">
+          <Key>
+            <PropertyRef Name="ID_Cost" />
+          </Key>
+          <Property Name="ID_Cost" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Estate" Type="Int32" Nullable="false" />
+          <Property Name="Current_cost" Type="Decimal" Precision="8" Scale="0" Nullable="false" />
+          <Property Name="First_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="First_cost" Type="Decimal" Precision="8" Scale="0" Nullable="false" />
+          <NavigationProperty Name="Estate" Relationship="Self.FK_Cost_Estate" FromRole="Cost" ToRole="Estate" />
+        </EntityType>
+        <EntityType Name="Estate">
+          <Key>
+            <PropertyRef Name="ID_Estate" />
+          </Key>
+          <Property Name="ID_Estate" Type="Int32" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Street" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="House" Type="Decimal" Precision="3" Scale="0" Nullable="false" />
+          <Property Name="Apartment" Type="Decimal" Precision="3" Scale="0" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Cost" Relationship="Self.FK_Cost_Estate" FromRole="Estate" ToRole="Cost" />
+          <NavigationProperty Name="Request" Relationship="Self.FK_Request_Estate" FromRole="Estate" ToRole="Request" />
+        </EntityType>
+        <EntityType Name="Request">
+          <Key>
+            <PropertyRef Name="ID_Request" />
+          </Key>
+          <Property Name="ID_Request" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_User" Type="Int32" Nullable="false" />
+          <Property Name="ID_Estate" Type="Int32" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Estate" Relationship="Self.FK_Request_Estate" FromRole="Request" ToRole="Estate" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Request_User" FromRole="Request" ToRole="User" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID_User" />
+          </Key>
+          <Property Name="ID_User" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Last_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="First_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Second_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="Decimal" Precision="10" Scale="0" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Account" Relationship="Self.FK_Account_User" FromRole="User" ToRole="Account" />
+          <NavigationProperty Name="Request" Relationship="Self.FK_Request_User" FromRole="User" ToRole="Request" />
+        </EntityType>
+        <Association Name="FK_Account_Access_level">
+          <End Role="Access_level" Type="Self.Access_level" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Access_level">
+              <PropertyRef Name="ID_Access_level" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="ID_Access_level" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="ID_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cost_Estate">
+          <End Role="Estate" Type="Self.Estate" Multiplicity="1" />
+          <End Role="Cost" Type="Self.Cost" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estate">
+              <PropertyRef Name="ID_Estate" />
+            </Principal>
+            <Dependent Role="Cost">
+              <PropertyRef Name="ID_Estate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_Estate">
+          <End Role="Estate" Type="Self.Estate" Multiplicity="0..1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estate">
+              <PropertyRef Name="ID_Estate" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="ID_Estate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Request_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Request" Type="Self.Request" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID_User" />
+            </Principal>
+            <Dependent Role="Request">
+              <PropertyRef Name="ID_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="kursEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Access_level" EntityType="Self.Access_level" />
+          <EntitySet Name="Account" EntityType="Self.Account" />
+          <EntitySet Name="Cost" EntityType="Self.Cost" />
+          <EntitySet Name="Estate" EntityType="Self.Estate" />
+          <EntitySet Name="Request" EntityType="Self.Request" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK_Account_Access_level" Association="Self.FK_Account_Access_level">
+            <End Role="Access_level" EntitySet="Access_level" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_User" Association="Self.FK_Account_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cost_Estate" Association="Self.FK_Cost_Estate">
+            <End Role="Estate" EntitySet="Estate" />
+            <End Role="Cost" EntitySet="Cost" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_Estate" Association="Self.FK_Request_Estate">
+            <End Role="Estate" EntitySet="Estate" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Request_User" Association="Self.FK_Request_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Request" EntitySet="Request" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище kursModelContainer" CdmEntityContainer="kursEntities">
+          <EntitySetMapping Name="Access_level">
+            <EntityTypeMapping TypeName="kursModel.Access_level">
+              <MappingFragment StoreEntitySet="Access_level">
+                <ScalarProperty Name="ID_Access_level" ColumnName="ID_Access_level" />
+                <ScalarProperty Name="Edit_estate_data" ColumnName="Edit_estate_data" />
+                <ScalarProperty Name="Edit_user_data" ColumnName="Edit_user_data" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Account">
+            <EntityTypeMapping TypeName="kursModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="ID_Account" ColumnName="ID_Account" />
+                <ScalarProperty Name="ID_User" ColumnName="ID_User" />
+                <ScalarProperty Name="ID_Access_level" ColumnName="ID_Access_level" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cost">
+            <EntityTypeMapping TypeName="kursModel.Cost">
+              <MappingFragment StoreEntitySet="Cost">
+                <ScalarProperty Name="ID_Cost" ColumnName="ID_Cost" />
+                <ScalarProperty Name="ID_Estate" ColumnName="ID_Estate" />
+                <ScalarProperty Name="Current_cost" ColumnName="Current_cost" />
+                <ScalarProperty Name="First_date" ColumnName="First_date" />
+                <ScalarProperty Name="First_cost" ColumnName="First_cost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Estate">
+            <EntityTypeMapping TypeName="kursModel.Estate">
+              <MappingFragment StoreEntitySet="Estate">
+                <ScalarProperty Name="ID_Estate" ColumnName="ID_Estate" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="House" ColumnName="House" />
+                <ScalarProperty Name="Apartment" ColumnName="Apartment" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Request">
+            <EntityTypeMapping TypeName="kursModel.Request">
+              <MappingFragment StoreEntitySet="Request">
+                <ScalarProperty Name="ID_Request" ColumnName="ID_Request" />
+                <ScalarProperty Name="ID_User" ColumnName="ID_User" />
+                <ScalarProperty Name="ID_Estate" ColumnName="ID_Estate" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="kursModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="kursModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ID_User" ColumnName="ID_User" />
+                <ScalarProperty Name="Last_name" ColumnName="Last_name" />
+                <ScalarProperty Name="First_name" ColumnName="First_name" />
+                <ScalarProperty Name="Second_name" ColumnName="Second_name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
